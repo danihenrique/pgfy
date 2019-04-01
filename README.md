@@ -1,4 +1,4 @@
-![PgFy](pgfy.png)
+![PgFy](https://img42.com/Q-m6w+)
 
 PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS.
 
