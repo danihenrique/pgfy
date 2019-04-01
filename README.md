@@ -1,4 +1,4 @@
-![PgFy](https://img42.com/Q-m6w+)
+![PgFy](https://github.com/danihenrique/pgfy/blob/master/pgfy.png?raw=true)
 
 PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS.
 
@@ -17,25 +17,94 @@ PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS 
 
 ## Table of Contents
 1. [Motivation](#motivation)
-1. [Boilerplate built-in](#boilerplate-built-in)
-    1. [API's with Fastify](#boilerplate-built-in)
-    1. [Postgres database with MassiveJS](#massivejs)
-    1. [Micro-services with CoteJS](#cotejs)
 1. [Getting started](#getting-started)
     1. [Installation](#installation)
     1. [Using pgfy for the first time](#using-pgfy-for-the-first-time)
 1. [Controlling PgFy with environment variables](#controlling-pgfy-with-environment-variables)    
+1. [Tools built-in](#tools-built-in)
+    1. [API's with Fastify](#apis-with-fastify)
+    1. [Postgres database with MassiveJS](#postgres-database-with-massivejs)
+    1. [Micro-services with CoteJS](#micro-services-with-cotejs)
 1. [Advanced Usage](#advanced-usage)
-    1. [How to extend using components?](#how-to-extend-using-components)
     1. [CLI](#cli)
-    1. [Fastify plugins](#fastify-plugins)
-    1. [NPM modules](#npm-modules)
+    1. [How to extend the API using components?](#how-to-extend-the-api-using-components)
+    1. [How to create Services?](#how-to-create-services)
+    1. [Add Fastify plugins](#add-fastify-plugins)
+    1. [Add NPM modules](#add-npm-modules)
 1. [FAQ](#faq)
 1. [Contribution](#contribution)
 1. [License](#mit-license)
 
 # Motivation
 Offer good tools for development API's and Microservices easily. Inspiration from LoopBack Framework.
+
+# Getting Started
+
+## Installation
+
+It's available as an [npm package](https://npmjs.org/package/pgfy).
+
+Install PgFy locally via npm:
+
+```
+$ npm install -g pgfy
+```
+
+## Using PgFy for the first time
+
+With PgFy you have two options, the "Api" and "Service" instances.
+The Api allows you to create a web server running, exposing your Postgres database, with all the common endpoints for it (Create, Read, Update, Delete).
+
+Plug-and-play, with _zero code_ you can access the documentation automatically generated
+(default at http://localhost:3000/documentation) all your database tables become an endpoint, for
+create, read, update or delete the data.
+
+----
+app.js
+```javascript
+const { Api, Service } = require('pgfy');
+const app = await Api();
+app.start();
+```
+
+----
+## Controlling PgFy with environment variables
+
+Here's a list of environment variables PgFy supports:
+
+| Variable name                           | Description |
+| --------------------------:             | :---------- |
+| `API_NAME`                              | API instance name. Default 'API'.
+| `API_HOST`                              | API instance host. Default 127.0.0.1.
+| `API_PORT`                              | API instance port. Default 3000.
+| `API_COMPONENTS_PATH`                   | The path to extend the API with components. Default '/src/components'.
+| `SERVICE_PATH`                          | The path for your services. Default '/src/services'.
+| `DATABASE_PG_HOST`                      | Postgres host. Default 127.0.0.1.
+| `DATABASE_PG_PORT`                      | Postgres port. Default 5432.
+| `DATABASE_PG_DATABASE`                  | Postgres database name. Default 'postgres'.
+| `DATABASE_PG_USER`                      | Postgres username. Default 'postgres'.
+| `DATABASE_PG_PWS`                       | Postgres password. Default ''.
+| `DATABASE_MONGODB_URL`                  | MongoDB Uri. Default 'mongodb://localhost:27017'.
+| `CACHE_REDIS_HOST`                      | Redis host. Default 127.0.0.1.
+| `CACHE_REDIS_PORT`                      | Redis port. Default 6379.
+| `CACHE_REDIS_GEOREDIS`                  | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis)
+| `TLS_KEY_PATH`                          | TLS Key Path. Default your $PROJECT_FOLDER/server.key.
+| `TLS_CERT_PATH`                         | TLS Cert Path. Default your $PROJECT_FOLDER/server.cert.
+| `APM_SENTRY_DSN`                        | Your Sentry DSN.
+| `LOGGER_TIMBER_KEY`                     | Your Timer Key.
+| `PAYMENTS_GERENCIANET_CLIENT_ID`        | GerenciaNet Client ID.
+| `PAYMENTS_GERENCIANET_CLIENT_SECRET`    | GerenciaNet Client Secret.
+| `PUSH_NOTIFICATION_APNS_KEY_PATH`       | Apple APNS key path. Default your $PROJECT_FOLDER/key.pem
+| `PUSH_NOTIFICATION_APNS_CERT_PATH`      | Apple APNS Cert path. Default your $PROJECT_FOLDER/cert.pem
+| `PUSH_NOTIFICATION_GCM_API_KEY`         | Google GCM API Key.
+| `OAUTH2_FACEBOOK_START_PATH`            | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.
+| `OAUTH2_FACEBOOK_CALLBACK_URI`          | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.
+| `SWAGGER_HOST_PORT`                     | Swagger URI. Default '127.0.0.1:3000'.
+| `SWAGGER_ROUTE_PREFIX`                  | Swagger route access. Default '/documentation'.
+| `SWAGGER_INFO_TITLE`                    | Swagger Title. Default 'Swagger UI'.
+| `SWAGGER_INFO_DESCRIPTION`              | Swagger Description. Default 'Swagger UI - API Documentation'.
+| `SWAGGER_INFO_VERSION`                  | Swagger Version. Default '1.0.0'.
+
 
 # Tools built-in
 
@@ -47,7 +116,6 @@ Enter Fastify. Fastify is a web framework highly focused on providing the best d
 
 - [Fastify Benchmarks](https://github.com/fastify/fastify#benchmarks)
 - [Fastify Documentation](https://github.com/fastify/fastify#documentation)
-
 
 ### Plugins pre-configured:
 - [fastify-cors](https://github.com/fastify/fastify-cors)
@@ -69,7 +137,6 @@ const users = [
 ];
 const usersActive = api.modules._.find(users, 'active');
 console.log('Users active: ', usersActive);
-
 ```
 
 - [GeoRedis](https://www.npmjs.com/package/georedis)
@@ -170,7 +237,9 @@ api.requester.send({
   if (err) return api.response(reply, 500, 'Timeout', {});
   return api.response(reply, 200, responseWithPong, {});
 });
+```
 
+```javascript
 /*
   In your SERVICE router.js at MACHINE 2
 */
@@ -190,81 +259,27 @@ const controllers = {
     }
   }
 }
-
 ```
-
-
-# Getting Started
-
-## Installation
-
-It's available as an [npm package](https://npmjs.org/package/pgfy).
-
-Install PgFy locally via npm:
-
-```
-$ npm install -g pgfy
-```
-
-## Using PgFy for the first time
-
-With PgFy you have two options, the "Api" and "Service" instances.
-The Api allows you to create a web server running, exposing your Postgres database, with all the common endpoints for it (Create, Read, Update, Delete).
-
-Plug-and-play, with _zero code_ you can access the documentation automatically generated
-(default at http://localhost:3000/documentation) all your database tables become an endpoint, for
-create, read, update or delete the data.
-
-----
-app.js
-```javascript
-const { Api, Service } = require('pgfy');
-const app = await Api();
-app.start();
-```
-
-----
-## Controlling PgFy with environment variables
-
-Here's a list of environment variables PgFy supports:
-
-| Variable name                           | Description |
-| --------------------------:             | :---------- |
-| `API_NAME`                              | API instance name. Default 'API'.
-| `API_HOST`                              | API instance host. Default 127.0.0.1.
-| `API_PORT`                              | API instance port. Default 3000.
-| `API_COMPONENTS_PATH`                   | The path to extend the API with components. Default '/src/components'.
-| `SERVICE_PATH`                          | The path for your services. Default '/src/services'.
-| `DATABASE_PG_HOST`                      | Postgres host. Default 127.0.0.1.
-| `DATABASE_PG_PORT`                      | Postgres port. Default 5432.
-| `DATABASE_PG_DATABASE`                  | Postgres database name. Default 'postgres'.
-| `DATABASE_PG_USER`                      | Postgres username. Default 'postgres'.
-| `DATABASE_PG_PWS`                       | Postgres password. Default ''.
-| `DATABASE_MONGODB_URL`                  | MongoDB Uri. Default 'mongodb://localhost:27017'.
-| `CACHE_REDIS_HOST`                      | Redis host. Default 127.0.0.1.
-| `CACHE_REDIS_PORT`                      | Redis port. Default 6379.
-| `CACHE_REDIS_GEOREDIS`                  | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis)
-| `TLS_KEY_PATH`                          | TLS Key Path. Default your $PROJECT_FOLDER/server.key.
-| `TLS_CERT_PATH`                         | TLS Cert Path. Default your $PROJECT_FOLDER/server.cert.
-| `APM_SENTRY_DSN`                        | Your Sentry DSN.
-| `LOGGER_TIMBER_KEY`                     | Your Timer Key.
-| `PAYMENTS_GERENCIANET_CLIENT_ID`        | GerenciaNet Client ID.
-| `PAYMENTS_GERENCIANET_CLIENT_SECRET`    | GerenciaNet Client Secret.
-| `PUSH_NOTIFICATION_APNS_KEY_PATH`       | Apple APNS key path. Default your $PROJECT_FOLDER/key.pem
-| `PUSH_NOTIFICATION_APNS_CERT_PATH`      | Apple APNS Cert path. Default your $PROJECT_FOLDER/cert.pem
-| `PUSH_NOTIFICATION_GCM_API_KEY`         | Google GCM API Key.
-| `OAUTH2_FACEBOOK_START_PATH`            | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.
-| `OAUTH2_FACEBOOK_CALLBACK_URI`          | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.
-| `SWAGGER_HOST_PORT`                     | Swagger URI. Default '127.0.0.1:3000'.
-| `SWAGGER_ROUTE_PREFIX`                  | Swagger route access. Default '/documentation'.
-| `SWAGGER_INFO_TITLE`                    | Swagger Title. Default 'Swagger UI'.
-| `SWAGGER_INFO_DESCRIPTION`              | Swagger Description. Default 'Swagger UI - API Documentation'.
-| `SWAGGER_INFO_VERSION`                  | Swagger Version. Default '1.0.0'.
-
 
 # Advanced Usage
 
-## How to extend using components?
+# CLI
+
+PgFy CLI
+```
+Terminal
+
+$ pgfy
+
+? Which template do you want to create? (Use arrow keys)
+❯ A new Api component 
+  A new Service 
+
+? Which template do you want to create? A new Api component
+? Type the name my-new-component
+```
+
+## How to extend the API using components?
 
 By default, the Api will check your env variable API_COMPONENTS_PATH (by default is 'src/components') looking for new components.
 
@@ -379,20 +394,80 @@ function tests(api, componentName) {
 module.exports = tests;
 ```
 
-# CLI
+## How to create Services?
 
-PgFy CLI
+By default, the Service will check your env variable SERVICE_PATH (by default is '/src/services') looking for new services.
+
+---
+Take a look for what is a "Service" inside PgFy.
 ```
-Terminal
+/src/services
+  |-- user
+    |-- management (A component of the User Service)
+        |-- controller.js
+        |-- route.js
+        |-- test.js
+```
 
-$ pgfy
+### Route.js file
+```javascript
+async function loadRoutes(responder, controller) {
+  try {
+    responder.on('hello', controller.helloWorld);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+module.exports = loadRoutes;
+```
 
-? Which template do you want to create? (Use arrow keys)
-❯ A new Api component 
-  A new Service 
+### Controller.js file
+```javascript
+function controller(service) {
+  const { db } = service;
+  const controllers = {
+    helloWorld: async (req, cb) => {
+      try {
+        return cb(null, 'Hello-World !!!');
+      } catch (e) {
+        return cb(e.message, false);
+      }
+    },
+  };
+  return controllers;
+}
+module.exports = controller;
+```
 
-? Which template do you want to create? A new Api component
-? Type the name my-new-component
+### Test.js file
+```javascript
+function tests(service) {
+  const contracts = {};
+  /*
+    PgFy will look for contracts for your Controllers.
+    They need to have the same method name. E.g: controller.helloWorld()
+    and contracts.helloWorld().
+    Than you can add one or more test cases as the sample below.
+    PgFy will check if the err and response are different as
+    it should be passing the requests inputs you want to.
+  */
+  contracts.helloWorld = () => {
+    const testCase = {};
+    testCase['Hello-World-Test'] = {
+      request: {
+        body: {},
+        query: {},
+        params: {},
+      },
+      error: null,
+      response: 'Hello World',
+    };
+    return testCase;
+  };
+  return { contracts };
+}
+module.exports = tests;
 ```
 
 ### Add Fastify plugins?
