@@ -15,7 +15,11 @@
     "cote",
     "ava"
   ],
-  "author": "Daniel Henrique",
+  "author": {
+    "name": "Daniel Henrique",
+    "email": "danihenrique@gmail.com"
+  },
+  "repository": "danihenrique/pgfy",
   "license": "MIT",
   "dependencies": {
     "@sentry/node": "^4.6.5",

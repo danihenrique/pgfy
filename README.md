@@ -2,9 +2,9 @@
 
 PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS.
 
-[![NPM version](https://badge.fury.io/js/pg-tables-to-jsonschema.png)](http://badge.fury.io/js/pg-tables-to-jsonschema)
+[![NPM version](https://badge.fury.io/js/pgfy.png)](http://badge.fury.io/js/pgfy)
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/dashersw/cote/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/danihenrique/pgfy/blob/master/LICENSE)
 
 **PgFy automatically generate the CRUD endpoints for your Postgres database. Allowing you easily extend it using components pattern**.
 
@@ -35,7 +35,7 @@ PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS 
 1. [License](#mit-license)
 
 # Motivation
-Offer good tools for development API's and Microservices easily.
+Offer good tools for development API's and Microservices easily. Inspiration from LoopBack Framework.
 
 # Tools built-in
 
