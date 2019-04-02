@@ -22,6 +22,7 @@
 - **Pre-configured:** Fastify came pre-configured with some the best plugins available;
 - **Extensible:** Easily extend your API using "Components pattern";
 - **Micro-service support:** Easily extend your application using "Microservice pattern";
+- **BlackBox Testing Support:** Easily add your inputs and outputs specs for Runtime Testing;
 - **Auto-Documentation:** Access all your API endpoints available using Swagger UI.
 
 ## Table of Contents
@@ -56,7 +57,7 @@ It's available as an [npm package](https://npmjs.org/package/pgfy).
 Install PgFy locally via npm:
 
 ```
-$ npm install -g pgfy
+$ npm install --save pgfy
 ```
 
 ## Using PgFy for the first time
@@ -280,7 +281,7 @@ PgFy CLI
 ```
 Terminal
 
-$ pgfy
+$ node ./node_modules/pgfy
 
 ? Which template do you want to create? (Use arrow keys)
 ❯ A new Api component 
