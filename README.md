@@ -265,7 +265,7 @@ responder.on('ping', controller.ping);
 const controllers = {
   ping: async (req, cb) => {
     try {
-      return cb('Pong', true);
+      return cb(null, 'Pong');
     } catch (e) {
       return cb(e.message, false);
     }
