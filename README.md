@@ -1,8 +1,13 @@
-![PgFy](https://github.com/danihenrique/pgfy/blob/master/pgfy.png?raw=true) BETA
+<h1 align="center">
+  <img src="https://github.com/danihenrique/pgfy/blob/master/pgfy.png?raw=true" alt="PgFy">
+  <b>BETA</b>
+</h1>
 
-PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS.
+> PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS.
 
-***** WORK-IN-PROGRESS !!! *****
+<h5 align="center">
+  WORK-IN-PROGRESS !!!
+</h5>
 
 [![NPM version](https://badge.fury.io/js/pgfy.png)](http://badge.fury.io/js/pgfy)
 

@@ -1,10 +1,10 @@
 {
   "name": "pgfy",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS",
   "main": "index.js",
   "bin": {
-    "cli": "./bin/cli"
+    "cli": "./bin/cli.js"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
