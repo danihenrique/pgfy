@@ -8,6 +8,8 @@ PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS 
 
 **PgFy automatically generate the CRUD endpoints for your Postgres database. Allowing you easily extend it using components pattern**.
 
+![Auto-generate](https://github.com/danihenrique/pgfy/blob/master/sample.png?raw=true)
+
 ## Features
 - **Auto-generate:** Automatically generate the endpoints for your database;
 - **Pre-configured:** Fastify came pre-configured with some the best plugins available;
