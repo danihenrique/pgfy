@@ -1,6 +1,8 @@
-![PgFy](https://github.com/danihenrique/pgfy/blob/master/pgfy.png?raw=true)
+![PgFy](https://github.com/danihenrique/pgfy/blob/master/pgfy.png?raw=true) BETA
 
 PgFy — A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS.
+
+***** WORK-IN-PROGRESS !!! *****
 
 [![NPM version](https://badge.fury.io/js/pgfy.png)](http://badge.fury.io/js/pgfy)
 
@@ -74,38 +76,38 @@ app.start();
 
 Here's a list of environment variables PgFy supports:
 
-| Variable name                           | Description |
-| --------------------------:             | :---------- |
-| `API_NAME`                              | API instance name. Default 'API'.
-| `API_HOST`                              | API instance host. Default 127.0.0.1.
-| `API_PORT`                              | API instance port. Default 3000.
-| `API_COMPONENTS_PATH`                   | The path to extend the API with components. Default '/src/components'.
-| `SERVICE_PATH`                          | The path for your services. Default '/src/services'.
-| `DATABASE_PG_HOST`                      | Postgres host. Default 127.0.0.1.
-| `DATABASE_PG_PORT`                      | Postgres port. Default 5432.
-| `DATABASE_PG_DATABASE`                  | Postgres database name. Default 'postgres'.
-| `DATABASE_PG_USER`                      | Postgres username. Default 'postgres'.
-| `DATABASE_PG_PWS`                       | Postgres password. Default ''.
-| `DATABASE_MONGODB_URL`                  | MongoDB Uri. Default 'mongodb://localhost:27017'.
-| `CACHE_REDIS_HOST`                      | Redis host. Default 127.0.0.1.
-| `CACHE_REDIS_PORT`                      | Redis port. Default 6379.
-| `CACHE_REDIS_GEOREDIS`                  | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis)
-| `TLS_KEY_PATH`                          | TLS Key Path. Default your $PROJECT_FOLDER/server.key.
-| `TLS_CERT_PATH`                         | TLS Cert Path. Default your $PROJECT_FOLDER/server.cert.
-| `APM_SENTRY_DSN`                        | Your Sentry DSN.
-| `LOGGER_TIMBER_KEY`                     | Your Timer Key.
-| `PAYMENTS_GERENCIANET_CLIENT_ID`        | GerenciaNet Client ID.
-| `PAYMENTS_GERENCIANET_CLIENT_SECRET`    | GerenciaNet Client Secret.
-| `PUSH_NOTIFICATION_APNS_KEY_PATH`       | Apple APNS key path. Default your $PROJECT_FOLDER/key.pem
-| `PUSH_NOTIFICATION_APNS_CERT_PATH`      | Apple APNS Cert path. Default your $PROJECT_FOLDER/cert.pem
-| `PUSH_NOTIFICATION_GCM_API_KEY`         | Google GCM API Key.
-| `OAUTH2_FACEBOOK_START_PATH`            | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.
-| `OAUTH2_FACEBOOK_CALLBACK_URI`          | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.
-| `SWAGGER_HOST_PORT`                     | Swagger URI. Default '127.0.0.1:3000'.
-| `SWAGGER_ROUTE_PREFIX`                  | Swagger route access. Default '/documentation'.
-| `SWAGGER_INFO_TITLE`                    | Swagger Title. Default 'Swagger UI'.
-| `SWAGGER_INFO_DESCRIPTION`              | Swagger Description. Default 'Swagger UI - API Documentation'.
-| `SWAGGER_INFO_VERSION`                  | Swagger Version. Default '1.0.0'.
+| Variable name                                | Description |
+| --------------------------:                  | :---------- |
+| `PGFY_API_NAME`                              | API instance name. Default 'API'.
+| `PGFY_API_HOST`                              | API instance host. Default 127.0.0.1.
+| `PGFY_API_PORT`                              | API instance port. Default 3000.
+| `PGFY_API_COMPONENTS_PATH`                   | The path to extend the API with components. Default '/src/components'.
+| `PGFY_SERVICE_PATH`                          | The path for your services. Default '/src/services'.
+| `PGFY_DATABASE_PG_HOST`                      | Postgres host. Default 127.0.0.1.
+| `PGFY_DATABASE_PG_PORT`                      | Postgres port. Default 5432.
+| `PGFY_DATABASE_PG_DATABASE`                  | Postgres database name. Default 'postgres'.
+| `PGFY_DATABASE_PG_USER`                      | Postgres username. Default 'postgres'.
+| `PGFY_DATABASE_PG_PWS`                       | Postgres password. Default ''.
+| `PGFY_DATABASE_MONGODB_URL`                  | MongoDB Uri. Default 'mongodb://localhost:27017'.
+| `PGFY_CACHE_REDIS_HOST`                      | Redis host. Default 127.0.0.1.
+| `PGFY_CACHE_REDIS_PORT`                      | Redis port. Default 6379.
+| `PGFY_CACHE_REDIS_GEOREDIS`                  | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis)
+| `PGFY_TLS_KEY_PATH`                          | TLS Key Path. Default your $PROJECT_FOLDER/server.key.
+| `PGFY_TLS_CERT_PATH`                         | TLS Cert Path. Default your $PROJECT_FOLDER/server.cert.
+| `PGFY_APM_SENTRY_DSN`                        | Your Sentry DSN.
+| `PGFY_LOGGER_TIMBER_KEY`                     | Your Timer Key.
+| `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`        | GerenciaNet Client ID.
+| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`    | GerenciaNet Client Secret.
+| `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`       | Apple APNS key path. Default your $PROJECT_FOLDER/key.pem
+| `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH`      | Apple APNS Cert path. Default your $PROJECT_FOLDER/cert.pem
+| `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`        | Google GCM API Key.
+| `PGFY_OAUTH2_FACEBOOK_START_PATH`            | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.
+| `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`          | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.
+| `PGFY_SWAGGER_HOST_PORT`                     | Swagger URI. Default '127.0.0.1:3000'.
+| `PGFY_SWAGGER_ROUTE_PREFIX`                  | Swagger route access. Default '/documentation'.
+| `PGFY_SWAGGER_INFO_TITLE`                    | Swagger Title. Default 'Swagger UI'.
+| `PGFY_SWAGGER_INFO_DESCRIPTION`              | Swagger Description. Default 'Swagger UI - API Documentation'.
+| `PGFY_SWAGGER_INFO_VERSION`                  | Swagger Version. Default '1.0.0'.
 
 
 # Tools built-in
@@ -283,7 +285,7 @@ $ pgfy
 
 ## How to extend the API using components?
 
-By default, the Api will check your env variable API_COMPONENTS_PATH (by default is 'src/components') looking for new components.
+By default, the Api will check your env variable PGFY_API_COMPONENTS_PATH (by default is 'src/components') looking for new components.
 
 ---
 Take a look for what is a "component" inside PgFy.
@@ -398,7 +400,7 @@ module.exports = tests;
 
 ## How to create Services?
 
-By default, the Service will check your env variable SERVICE_PATH (by default is '/src/services') looking for new services.
+By default, the Service will check your env variable PGFY_SERVICE_PATH (by default is '/src/services') looking for new services.
 
 ---
 Take a look for what is a "Service" inside PgFy.
@@ -532,7 +534,7 @@ feature and submit a pull request.
 MIT License
 ----
 
-Copyright (c) 2019 Daniel Henrique
+Copyright (c) 2019 Daniel Henrique. Built in Blumenau ❤️.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
