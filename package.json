@@ -1,6 +1,6 @@
 {
   "name": "pgfy",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS",
   "main": "index.js",
   "scripts": {
