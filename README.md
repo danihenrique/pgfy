@@ -227,9 +227,10 @@ A Node.js library for building zero-configuration microservices
 
 ## How to implement Microservice pattern
 
+**MACHINE 1**
 ```javascript
 /*
-  In your API controller.js at MACHINE 1
+  In your API controller.js
 */
 ...
 api.requester.send({
@@ -243,15 +244,16 @@ api.requester.send({
 });
 ```
 
+**MACHINE 2**
 ```javascript
 /*
-  In your SERVICE router.js at MACHINE 2
+  In your SERVICE router.js
 */
 ...
 responder.on('ping', controller.ping);
 
 /*
-  In your SERVICE controller.js at MACHINE 2
+  In your SERVICE controller.js
 */
 ...
 const controllers = {
