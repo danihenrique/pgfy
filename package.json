@@ -1,6 +1,6 @@
 {
   "name": "pgfy",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A Node.js Toolbox for API and Micro-service development with MassiveJS + Fastify + CoteJS",
   "main": "index.js",
   "bin": {
@@ -27,6 +27,7 @@
   "dependencies": {
     "@sentry/node": "^4.6.5",
     "apns": "^0.1.0",
+    "bluebird": "^3.5.4",
     "bunyan": "^1.8.12",
     "chalk-pipe": "^2.0.0",
     "cote": "^0.19.1",
@@ -56,6 +57,7 @@
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
     "pg-json-schema-export": "^0.13.7",
+    "postgres-migrations": "^3.0.2",
     "redis": "^2.8.0",
     "timber": "^3.1.3"
   },

@@ -24,6 +24,7 @@
 - **Extensible:** Extends your API using "Components pattern";
 - **Micro-service support:** Easily scale your application using "Microservice pattern";
 - **BlackBox Testing Support:** Adds your input and output specs for Runtime Testing;
+- **Postgres Migrations Support:** Easily manage your migrations;
 - **Auto-Documentation:** Access all available API endpoints using Swagger UI.
 
 ## Table of Contents
@@ -36,6 +37,7 @@
 1. [Tools built-in](#tools-built-in)
    1. [API's with Fastify](#apis-with-fastify)
    1. [Postgres database with MassiveJS](#postgres-database-with-massivejs)
+   1. [Postgres Migrations Management](#postgres-migrations-management)
    1. [Micro-services with CoteJS](#micro-services-with-cotejs)
 1. [Advanced Usage](#advanced-usage)
    1. [CLI](#cli)
@@ -83,6 +85,17 @@ app.start();
 
 ## Controlling PgFy with environment variables
 
+PgFy uses environment variables as your configuration guide.
+**You can create a new file with ".env" name inside your project root folder, that will be loaded in your O.S as environment variables.**
+
+```sh 
+Terminal
+$cat ./.env
+
+PGFY_DATABASE_PG_DATABASE='your_database'
+...
+
+```
 Here's a list of environment variables supported by PgFy:
 
 |                             Variable name | Description                                                                                                        |
@@ -240,6 +253,29 @@ const testSave = await db.some_database.destroy(rowId);
 - [Check MassiveJS documentation](https://massivejs.org/docs/connecting)
 
 ---
+ ## Postgres Migrations Management
+
+ ```javascript
+  const { Migrations } = require('pgfy');
+  const migrations = await Migrations({});
+  migrations.execute();
+```
+
+PgFy Migrations will search for SQL migrations files at "/$PROJECT_FOLDER/migrations/".
+Remember that you can change the database using environment variables.
+
+<div align="center">
+  <h5>Migration folder structure with ordered files</h5>
+  <img src="https://github.com/danihenrique/pgfy/blob/master/migrations_files.png?raw=true" alt="PgFy Migrations files">
+</div>
+
+<div align="center">
+  <h5>After "execute" the PgFy Migrations, a new table will be created for management</h5>
+  <img src="https://github.com/danihenrique/pgfy/blob/master/migrations_table.png?raw=true" alt="PgFy Migrations Table">
+</div>
+
+---
+
 
 ## Micro-services with CoteJS
 
@@ -260,7 +296,6 @@ api.requester.send({
   type: 'ping',
   body: request.body,
   params: request.params,
-  user,
 }, (err, responseWithPong) => {
   if (err) return api.response(reply, 500, 'Timeout', {});
   return api.response(reply, 200, responseWithPong, {});
@@ -271,13 +306,20 @@ api.requester.send({
 
 ```javascript
 /*
-  In your SERVICE router.js
+  In your app.js
+*/
+
+const { Service } = require('pgfy');
+const microservice = await Service('YOUR_SERVICE_FOLDER_NAME', {});
+
+/*
+  In your SERVICE /YOUR_SERVICE_FOLDER_NAME/management/router.js
 */
 ...
 responder.on('ping', controller.ping);
 
 /*
-  In your SERVICE controller.js
+  In your SERVICE /YOUR_SERVICE_FOLDER_NAME/management/controller.js
 */
 ...
 const controllers = {
@@ -297,10 +339,10 @@ const controllers = {
 
 PgFy CLI
 
-```
+```sh
 Terminal
 
-$ node ./node_modules/pgfy
+$node ./node_modules/pgfy
 
 ? Which template do you want to create? (Use arrow keys)
 ❯ A new Api component
@@ -519,10 +561,10 @@ module.exports = tests;
 
 Offcourse. To add a new plugin, pass it inside your API configuration:
 
-```
+```sh
 Terminal
 
-$ npm install --save fastify-oas
+$npm install --save fastify-oas
 ```
 
 ```javascript
