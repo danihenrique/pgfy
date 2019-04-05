@@ -26,6 +26,7 @@
 - **Cache Support:** Easily cache your data using built-in Redis Client;
 - **BlackBox Testing Support:** Adds your input and output specs for Runtime Testing;
 - **Postgres Migrations Support:** Easily manage your migrations;
+- **APM Support:** Catch Exceptions and be notified;
 - **Auto-Documentation:** Access all available API endpoints using Swagger UI.
 
 ## Table of Contents
@@ -41,6 +42,8 @@
    1. [Postgres Migrations Management](#postgres-migrations-management)
    1. [Micro-services with CoteJS](#micro-services-with-cotejs)
    1. [Cache with built-in Redis client](#cache-with-built-in-redis-client)
+   1. [APM Support](#apm-support)
+      1. [Sentry](#Sentry)
 1. [Advanced Usage](#advanced-usage)
    1. [CLI](#cli)
    1. [How to extend the API using components?](#how-to-extend-the-api-using-components)
@@ -370,6 +373,42 @@ function Controller(api, componentName) {
 module.exports = Controller;
 ```
 
+---
+# APM Support
+
+## Sentry
+Sentry is an error tracking that helps developers monitor and fix crashes in real time. Iterate continuously. Boost efficiency. Improve user experience.
+
+[Sentry Website](https://sentry.io/)
+
+How to enable Sentry inside PgFY to catch all exceptions automatically?
+In your ".env" file, set your environment variable for Sentry DSN:
+```terminal
+PGFY_APM_SENTRY_DSN='YOUR_SENTRY_DSN'
+```
+
+How to use the APM inside your code?
+```javascript
+/*
+  In your API controller.js
+*/
+function Controller(api, componentName) {
+  const controllers = {
+    helloWorld: async (request, reply) => {
+      try {
+        // Your code here...
+        return true;
+      } catch (e) {
+        // Send the error to APM method
+        api.apm(api, e);
+        return false;
+      }
+    },
+  };
+  return controllers;
+}
+module.exports = Controller;
+```
 
 # Advanced Usage
 
