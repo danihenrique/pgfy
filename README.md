@@ -23,6 +23,7 @@
 - **Pre-configured:** Fastify comes pre-configured with some of the best plugins available;
 - **Extensible:** Extends your API using "Components pattern";
 - **Micro-service support:** Easily scale your application using "Microservice pattern";
+- **Cache Support:** Easily cache your data using built-in Redis Client;
 - **BlackBox Testing Support:** Adds your input and output specs for Runtime Testing;
 - **Postgres Migrations Support:** Easily manage your migrations;
 - **Auto-Documentation:** Access all available API endpoints using Swagger UI.
@@ -39,6 +40,7 @@
    1. [Postgres database with MassiveJS](#postgres-database-with-massivejs)
    1. [Postgres Migrations Management](#postgres-migrations-management)
    1. [Micro-services with CoteJS](#micro-services-with-cotejs)
+   1. [Cache with built-in Redis client](#cache-with-built-in-redis-client)
 1. [Advanced Usage](#advanced-usage)
    1. [CLI](#cli)
    1. [How to extend the API using components?](#how-to-extend-the-api-using-components)
@@ -98,38 +100,39 @@ PGFY_DATABASE_PG_DATABASE='your_database'
 ```
 Here's a list of environment variables supported by PgFy:
 
-|                             Variable name | Description                                                                                                        |
-| ----------------------------------------: | :----------------------------------------------------------------------------------------------------------------- |
-|                           `PGFY_API_NAME` | API instance name. Default 'API'.                                                                                  |
-|                           `PGFY_API_HOST` | API instance host. Default 127.0.0.1.                                                                              |
-|                           `PGFY_API_PORT` | API instance port. Default 3000.                                                                                   |
-|                `PGFY_API_COMPONENTS_PATH` | The path to extend the API with components. Default '/src/components'.                                             |
-|                       `PGFY_SERVICE_PATH` | The path for your services. Default '/src/services'.                                                               |
-|                   `PGFY_DATABASE_PG_HOST` | Postgres host. Default 127.0.0.1.                                                                                  |
-|                   `PGFY_DATABASE_PG_PORT` | Postgres port. Default 5432.                                                                                       |
-|               `PGFY_DATABASE_PG_DATABASE` | Postgres database name. Default 'postgres'.                                                                        |
-|                   `PGFY_DATABASE_PG_USER` | Postgres username. Default 'postgres'.                                                                             |
-|                    `PGFY_DATABASE_PG_PWS` | Postgres password. Default ''.                                                                                     |
-|               `PGFY_DATABASE_MONGODB_URL` | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
-|                   `PGFY_CACHE_REDIS_HOST` | Redis host. Default 127.0.0.1.                                                                                     |
-|                   `PGFY_CACHE_REDIS_PORT` | Redis port. Default 6379.                                                                                          |
-|               `PGFY_CACHE_REDIS_GEOREDIS` | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
-|                       `PGFY_TLS_KEY_PATH` | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
-|                      `PGFY_TLS_CERT_PATH` | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
-|                     `PGFY_APM_SENTRY_DSN` | Your Sentry DSN.                                                                                                   |
-|                  `PGFY_LOGGER_TIMBER_KEY` | Your Timer Key.                                                                                                    |
-|     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID` | GerenciaNet Client ID.                                                                                             |
-| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET` | GerenciaNet Client Secret.                                                                                         |
-|    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH` | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
-|   `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH` | Apple APNS Cert path. Default your \$PROJECT_FOLDER/cert.pem                                                       |
-|     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY` | Google GCM API Key.                                                                                                |
-|         `PGFY_OAUTH2_FACEBOOK_START_PATH` | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
-|       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI` | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
-|                  `PGFY_SWAGGER_HOST_PORT` | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
-|               `PGFY_SWAGGER_ROUTE_PREFIX` | Swagger route access. Default '/documentation'.                                                                    |
-|                 `PGFY_SWAGGER_INFO_TITLE` | Swagger Title. Default 'Swagger UI'.                                                                               |
-|           `PGFY_SWAGGER_INFO_DESCRIPTION` | Swagger Description. Default 'Swagger UI - API Documentation'.                                                     |
-|               `PGFY_SWAGGER_INFO_VERSION` | Swagger Version. Default '1.0.0'.                                                                                  |
+|                             Variable name     | Description                                                                                                        |
+| ----------------------------------------:     | :----------------------------------------------------------------------------------------------------------------- |
+|                           `PGFY_API_NAME`     | API instance name. Default 'API'.                                                                                  |
+|                           `PGFY_API_HOST`     | API instance host. Default 127.0.0.1.                                                                              |
+|                           `PGFY_API_PORT`     | API instance port. Default 3000.                                                                                   |
+|                `PGFY_API_COMPONENTS_PATH`     | The path to extend the API with components. Default '/src/components'.                                             |
+|                       `PGFY_SERVICE_PATH`     | The path for your services. Default '/src/services'.                                                               |
+|                   `PGFY_DATABASE_PG_HOST`     | Postgres host. Default 127.0.0.1.                                                                                  |
+|                   `PGFY_DATABASE_PG_PORT`     | Postgres port. Default 5432.                                                                                       |
+|               `PGFY_DATABASE_PG_DATABASE`     | Postgres database name. Default 'postgres'.                                                                        |
+|                   `PGFY_DATABASE_PG_USER`     | Postgres username. Default 'postgres'.                                                                             |
+|                    `PGFY_DATABASE_PG_PWS`     | Postgres password. Default ''.                                                                                     |
+|               `PGFY_DATABASE_MONGODB_URL`     | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
+|                   `PGFY_CACHE_REDIS_HOST`     | Redis host. Default 127.0.0.1.                                                                                     |
+|                   `PGFY_CACHE_REDIS_PORT`     | Redis port. Default 6379.                                                                                          |
+|               `PGFY_CACHE_REDIS_GEOREDIS`     | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
+|               `PGFY_CACHE_REDIS_EXPIRE_TIME`  | Redis Cache expiration time in minutes. Default 1 minute.                                                          |
+|                       `PGFY_TLS_KEY_PATH`     | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
+|                      `PGFY_TLS_CERT_PATH`     | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
+|                     `PGFY_APM_SENTRY_DSN`     | Your Sentry DSN.                                                                                                   |
+|                  `PGFY_LOGGER_TIMBER_KEY`     | Your Timer Key.                                                                                                    |
+|     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`     | GerenciaNet Client ID.                                                                                             |
+| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`     | GerenciaNet Client Secret.                                                                                         |
+|    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`     | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
+|   `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH`     | Apple APNS Cert path. Default your \$PROJECT_FOLDER/cert.pem                                                       |
+|     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`     | Google GCM API Key.                                                                                                |
+|         `PGFY_OAUTH2_FACEBOOK_START_PATH`     | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
+|       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`     | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
+|                  `PGFY_SWAGGER_HOST_PORT`     | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
+|               `PGFY_SWAGGER_ROUTE_PREFIX`     | Swagger route access. Default '/documentation'.                                                                    |
+|                 `PGFY_SWAGGER_INFO_TITLE`     | Swagger Title. Default 'Swagger UI'.                                                                               |
+|           `PGFY_SWAGGER_INFO_DESCRIPTION`     | Swagger Description. Default 'Swagger UI - API Documentation'.                                                     |
+|               `PGFY_SWAGGER_INFO_VERSION`     | Swagger Version. Default '1.0.0'.                                                                                  |
 
 # Tools built-in
 
@@ -276,7 +279,6 @@ Remember that you can change the database using environment variables.
 
 ---
 
-
 ## Micro-services with CoteJS
 
 A Node.js library for building zero-configuration microservices
@@ -332,6 +334,42 @@ const controllers = {
   }
 }
 ```
+
+---
+
+## Cache with built-in Redis client
+
+### How to use our built-in Redis client inside your controllers
+
+```javascript
+/*
+  In your API controller.js
+*/
+function Controller(api, componentName) {
+  const { redis } = api;
+  const controllers = {
+    helloWorld: async (request, reply) => {
+      // GET or SAVE using IDs
+      const paramId = 1;
+      const foundId = await service.redis.get(paramId);
+      if (!foundId) {
+        const saveDataWithId = await service.redis.set(paramId,{ name: 'Save by ID' });
+      }
+      // GET or SAVE using Ojects
+      const paramsObject = { id: 1 };
+      const foundObject = await service.redis.get(paramsObject);
+      if (!foundObject) {
+        // Change the default EXPIRATION TIME in minutes.
+        // You can also change globally using environment variables
+        const saveDataWithObject = await service.redis.set(paramsObject,{ name: 'Save by object' }, 10);
+      }
+    },
+  };
+  return controllers;
+}
+module.exports = Controller;
+```
+
 
 # Advanced Usage
 
