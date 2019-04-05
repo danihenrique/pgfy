@@ -342,7 +342,11 @@ PgFy CLI
 ```sh
 Terminal
 
-$node ./node_modules/pgfy
+If you installed locally:
+$node ./node_modules/pgfy 
+
+If you installed globally:
+$pgfy
 
 ? Which template do you want to create? (Use arrow keys)
 ❯ A new Api component
