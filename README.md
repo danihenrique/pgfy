@@ -3,7 +3,7 @@
   <b>BETA</b>
 </h1>
 
-> PgFy — A Node.js Toolbox for API and Microservices development built with MassiveJS + Fastify + CoteJS.
+> PgFy — A Node.js Toolbox for API and Microservices development.
 
 <h5 align="center">
   WORK-IN-PROGRESS !!!
