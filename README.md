@@ -23,10 +23,10 @@
 - **Pre-configured:** Fastify comes pre-configured with some of the best plugins available;
 - **Extensible:** Extends your API using "Components pattern";
 - **Microservices support:** Easily scale your application using "Microservice pattern";
-- **Cache Support:** Easily cache your data using built-in Redis Client;
-- **BlackBox Testing Support:** Adds your input and output specs for Runtime Testing;
-- **Postgres Migrations Support:** Easily manage your migrations;
-- **APM Support:** Catch Exceptions and be notified;
+- **Cache support:** Easily cache your data using built-in Redis Client;
+- **BlackBox Testing support:** Adds your input and output specs for Runtime Testing;
+- **Postgres Migrations support:** Easily manage your migrations;
+- **APM support:** Catch Exceptions and be notified;
 - **Auto-Documentation:** Access all available API endpoints using Swagger UI.
 
 ## Table of Contents
@@ -39,6 +39,7 @@
    1. [Creating Microservices](#creating-microservices)
 1. [Postgres Database](#postgres-database)      
    1. [How to use MassiveJS](#how-to-use-massivejs)
+   1. [MassiveJS advanced usage](#massivejs-advanced-usage)
    1. [Migrations Management](#migrations-management)   
 1. [Cache with built-in Redis client](#cache-with-built-in-redis-client)
 1. [APM Support](#apm-support)
@@ -239,6 +240,10 @@ PgFy uses MassiveJS as a data mapper for Node.js that goes all in on PostgreSQL 
 
 Massive is not an object-relational mapper (ORM)! It doesn't use models, it doesn't track state and it doesn't limit you to a single entity-based metaphor for accessing and persisting data. Massive connects to your database and introspects its schemas to build an API for the data model you already have: your tables, views, functions, and easily-modified SQL scripts.
 
+### Want to know more about Massive.js?
+
+[Database as API with PostgreSQL and Massive.js - Dian Fay at NDC Conferences](https://youtu.be/wgoPa5Kn0n0)
+
 <details>
 <summary>
     Basic usage
@@ -284,6 +289,7 @@ const testSave = await db.some_database.destroy(rowId);
 - [Check MassiveJS documentation](https://massivejs.org/docs/connecting)
 
 ---
+
  ## Migrations Management
 
  ```javascript
