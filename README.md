@@ -47,7 +47,7 @@
 1. [Advanced Usage](#advanced-usage)
    1. [Controlling PgFy with environment variables](#controlling-pgfy-with-environment-variables)
    1. [CLI](#cli)
-   1. [How to extend the API using components?](#how-to-extend-the-api-using-components)
+   1. [How to extend the PgFy API using components](#how-to-extend-the-pgfy-api-using-components)
    1. [How to create Services?](#how-to-create-services)
    1. [Add Fastify plugins](#add-fastify-plugins)
    1. [Add NPM modules](#add-npm-modules)
@@ -442,9 +442,13 @@ Here's a list of environment variables supported by PgFy:
 |     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`     | Google GCM API Key.                                                                                                |
 |         `PGFY_OAUTH2_FACEBOOK_START_PATH`     | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
 |       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`     | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
-|         `PGFY_FACEBOOK_CLIENT_ID`             | Facebook OAuth2.0 Client ID.                                                |
-|         `PGFY_FACEBOOK_CLIENT_SECRET`         | Facebook OAuth2.0 Client Secret.                                            |
-|         `PGFY_FACEBOOK_USER_TABLE`            | Facebook OAuth2.0 database user table. Default table is 'user'              |
+|         `PGFY_FACEBOOK_CLIENT_ID`             | Facebook OAuth2.0 Client ID.                                                                                       |
+|         `PGFY_FACEBOOK_CLIENT_SECRET`         | Facebook OAuth2.0 Client Secret.                                                                                   |
+|         `PGFY_AUTH_SESSION_SECRET`            | Authentication Session Secret. Example: 'a secret with minimum length of 32 characters'                            |
+|         `PGFY_AUTH_SESSION_LOGIN`             | Authentication Session login endpoint. Default is '/login'                                                         |
+|         `PGFY_AUTH_USER_TABLE`                | Authentication user database table. Default table is 'user'                                                        |
+|         `PGFY_AUTH_USER_TABLE_LOGIN_FIELD`    | Login field for User table authentication. Default field is 'email'                                                |
+|         `PGFY_AUTH_USER_TABLE_PASSWORD_FIELD` | Password field for User table authentication. Default field is 'password'                                          |
 |                  `PGFY_SWAGGER_HOST_PORT`     | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
 |               `PGFY_SWAGGER_ROUTE_PREFIX`     | Swagger route access. Default '/documentation'.                                                                    |
 |                 `PGFY_SWAGGER_INFO_TITLE`     | Swagger Title. Default 'Swagger UI'.                                                                               |

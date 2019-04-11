@@ -1,6 +1,6 @@
 {
   "name": "pgfy",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A Node.js Toolbox for API and Microservices development.",
   "main": "index.js",
   "bin": {
@@ -40,6 +40,7 @@
     "fastify-oas": "^2.0.0",
     "fastify-oauth2": "^2.0.0",
     "fastify-rate-limit": "^2.1.0",
+    "fastify-session": "^2.0.0",
     "fastify-tls-keygen": "^1.1.0",
     "fs": "0.0.1-security",
     "fs-extra": "^7.0.1",
