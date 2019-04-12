@@ -24,6 +24,7 @@
 - **Extensible:** Extends your API using "Components pattern";
 - **Microservices support:** Easily scale your application using "Microservice pattern";
 - **Cache support:** Easily cache your data using built-in Redis Client;
+- **Authentication support:** Easily add authentication for your endpoints;
 - **BlackBox Testing support:** Adds your input and output specs for Runtime Testing;
 - **Postgres Migrations support:** Easily manage your migrations;
 - **APM support:** Catch Exceptions and be notified;
@@ -41,6 +42,9 @@
    1. [How to use MassiveJS](#how-to-use-massivejs)
    1. [MassiveJS advanced usage](#massivejs-advanced-usage)
    1. [Migrations Management](#migrations-management)   
+1. [Authentication support](#authentication-support)
+   1. [Facebook Auth OAuth 2.0](#facebook-auth-oauth-2.0)
+   1. [Session Authentication with Redis](#session-authentication-with-redis)
 1. [Cache with built-in Redis client](#cache-with-built-in-redis-client)
 1. [APM Support](#apm-support)
    1. [Sentry](#sentry)
@@ -102,6 +106,7 @@ The Api option automatically generates CRUD (Create, Read, Update, Delete) endpo
 - [fastify-oas](https://gitlab.com/m03geek/fastify-oas)
 - [fastify-tls-keygen](https://gitlab.com/sebdeckers/fastify-tls-keygen)
 - [fastify-oauth2](https://github.com/fastify/fastify-oauth2)
+- [fastify-session-sets](https://github.com/mattiasewers/fastify-session-sets)
 - [fastify-metrics](https://gitlab.com/m03geek/fastify-metrics#http-routes-metrics)
 
 ### NPM Modules pre-configured:
@@ -313,7 +318,50 @@ Remember that you can change the database using environment variables.
 
 ---
 
+# Authentication support
+
+## Facebook Auth OAuth 2.0
+
+Create and configure your app inside [Facebook Developers page](https://developers.facebook.com/).
+
+Set the environment variables **'PGFY_FACEBOOK_CLIENT_ID'** and **'PGFY_FACEBOOK_CLIENT_SECRET'** to enable it. Also set the variable **'PGFY_OAUTH2_FACEBOOK_CALLBACK_URI'** for your domain like 'https://www.myapp.com/login/facebook/callback'. All those informations, must be same from Facebook Developers page.
+
+## Session Authentication with Redis
+
+Create a login component and set your User session, passing your User data with the required user_id field.
+Checkout [Cache with built-in Redis client](#cache-with-built-in-redis-client) to know how to configure Redis Client.
+
+```javascript
+// In your API login controller.js
+...
+// Set the user session object with your authenticated User object.
+
+let session = await request.session.get();
+if (session.user_id === undefined) {
+  await request.session.set({
+    user_id: 1, // Required field
+    name: 'Guest',
+  });
+}
+session = await request.session.get();
+console.log(session);
+// {id: "wPRh9dJBMnPagvChI+mvNpGw", user_id: "1", name: "Guest"}
+```
+
+```javascript
+// In your API logout controller.js
+...
+// Cleanup the User Session
+const status = await request.session.store.delete_all('user_id', 1); // return true if successful 
+```
+
+---
+
 ## Cache with built-in Redis client
+
+### How to setup the Redis inside PgFy?
+You just need to configurate the environment variables **'PGFY_CACHE_REDIS_HOST'** and **'PGFY_CACHE_REDIS_PORT'**,
+PgFy will automatically connect to it, and expose our built-in Redis Client into the Api/Service instance.
 
 <details>
 <summary>
@@ -427,8 +475,8 @@ Here's a list of environment variables supported by PgFy:
 |                   `PGFY_DATABASE_PG_USER`     | Postgres username. Default 'postgres'.                                                                             |
 |                    `PGFY_DATABASE_PG_PWS`     | Postgres password. Default ''.                                                                                     |
 |               `PGFY_DATABASE_MONGODB_URL`     | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
-|                   `PGFY_CACHE_REDIS_HOST`     | Redis host. Default 127.0.0.1.                                                                                     |
-|                   `PGFY_CACHE_REDIS_PORT`     | Redis port. Default 6379.                                                                                          |
+|                   `PGFY_CACHE_REDIS_HOST`     | Redis host.
+|                   `PGFY_CACHE_REDIS_PORT`     | Redis port.
 |               `PGFY_CACHE_REDIS_GEOREDIS`     | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
 |               `PGFY_CACHE_REDIS_EXPIRE_TIME`  | Redis Cache expiration time in minutes. Default 1 minute.                                                          |
 |                       `PGFY_TLS_KEY_PATH`     | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
@@ -444,8 +492,10 @@ Here's a list of environment variables supported by PgFy:
 |       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`     | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
 |         `PGFY_FACEBOOK_CLIENT_ID`             | Facebook OAuth2.0 Client ID.                                                                                       |
 |         `PGFY_FACEBOOK_CLIENT_SECRET`         | Facebook OAuth2.0 Client Secret.                                                                                   |
+|         `PGFY_FACEBOOK_PERSIST_PROFILE`       | Facebook OAuth2.0 persist user profile into the user database. Default false                                       |
 |         `PGFY_AUTH_SESSION_SECRET`            | Authentication Session Secret. Example: 'a secret with minimum length of 32 characters'                            |
 |         `PGFY_AUTH_SESSION_LOGIN`             | Authentication Session login endpoint. Default is '/login'                                                         |
+|         `PGFY_AUTH_SESSION_MAX_AGE`           | Authentication Session max age. Default is '28 days'                                                               |
 |         `PGFY_AUTH_USER_TABLE`                | Authentication user database table. Default table is 'user'                                                        |
 |         `PGFY_AUTH_USER_TABLE_LOGIN_FIELD`    | Login field for User table authentication. Default field is 'email'                                                |
 |         `PGFY_AUTH_USER_TABLE_PASSWORD_FIELD` | Password field for User table authentication. Default field is 'password'                                          |

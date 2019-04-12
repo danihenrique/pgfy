@@ -1,6 +1,6 @@
 {
   "name": "pgfy",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "A Node.js Toolbox for API and Microservices development.",
   "main": "index.js",
   "bin": {
@@ -41,13 +41,14 @@
     "fastify-oas": "^2.0.0",
     "fastify-oauth2": "^2.0.0",
     "fastify-rate-limit": "^2.1.0",
-    "fastify-session": "^2.0.0",
+    "fastify-session-sets": "^1.2.2",
     "fastify-tls-keygen": "^1.1.0",
     "fs": "0.0.1-security",
     "fs-extra": "^7.0.1",
     "georedis": "^3.1.1",
     "gn-api-sdk-node": "0.0.23",
     "inquirer": "^6.2.2",
+    "ioredis": "^4.9.0",
     "live-plugin-manager": "^0.12.0",
     "lodash": "^4.17.11",
     "massive": "^5.7.7",
