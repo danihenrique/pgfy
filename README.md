@@ -25,6 +25,7 @@
 - **Microservices support:** Easily scale your application using "Microservice pattern";
 - **Cache support:** Easily cache your data using built-in Redis Client;
 - **Authentication support:** Easily add authentication for your endpoints;
+- **Log management:** Easily access all your logs;
 - **BlackBox Testing support:** Adds your input and output specs for Runtime Testing;
 - **Postgres Migrations support:** Easily manage your migrations;
 - **APM support:** Catch Exceptions and be notified;
@@ -44,8 +45,11 @@
    1. [Migrations Management](#migrations-management)   
 1. [Authentication support](#authentication-support)
    1. [Facebook Auth OAuth 2.0](#facebook-auth-oauth-2.0)
+   1. [JSON WebToken](#json-webtoken)
    1. [Session Authentication with Redis](#session-authentication-with-redis)
 1. [Cache with built-in Redis client](#cache-with-built-in-redis-client)
+1. [Log management](#log-management)
+   1. [Timber. io](#timber.-io)
 1. [APM Support](#apm-support)
    1. [Sentry](#sentry)
 1. [Advanced Usage](#advanced-usage)
@@ -326,7 +330,40 @@ Create and configure your app inside [Facebook Developers page](https://develope
 
 Set the environment variables **'PGFY_FACEBOOK_CLIENT_ID'** and **'PGFY_FACEBOOK_CLIENT_SECRET'** to enable it. Also set the variable **'PGFY_OAUTH2_FACEBOOK_CALLBACK_URI'** for your domain like 'https://www.myapp.com/login/facebook/callback'. All those informations, must be same from Facebook Developers page.
 
+## How to persist the Facebook User profile in your database?
+
+If you set the environment variable **'PGFY_FACEBOOK_PERSIST_PROFILE'** to true, the following
+user object will be saved in your user table configured on **'PGFY_AUTH_USER_TABLE'**.
+
+```javascript
+const newUser = {
+  name: 'String',
+  email: 'String',
+  gender: 'String',
+  location: 'String',
+  picture: 'String',
+  facebook: 'Number',
+  total_friends: 'Number',
+};
+```
+
+## JSON WebToken
+
+To enable JSON WebToken Authentication, set the environment variable **'PGFY_AUTH_JWT_SECRET'**.
+
+```javascript
+// In your Login controller
+...
+// Validate your user (username/email and password), if its ok create a token and send back to the user
+const token = api.jwt.sign(request.body);
+reply.send({ token });
+```
+
+The API will validate all requests for a **'v1'** endpoint, eg: **'/v1/user/:userId'**, and also that it's not a **'/login'**, eg: **'/v1/login'**. Looking to the **Authorization** header, eg: 'Bearer your_token_here'.
+
 ## Session Authentication with Redis
+
+To enable Session Authentication, set the environment variable **'PGFY_AUTH_SESSION_SECRET'**.
 
 Create a login component and set your User session, passing your User data with the required user_id field.
 Checkout [Cache with built-in Redis client](#cache-with-built-in-redis-client) to know how to configure Redis Client.
@@ -399,6 +436,22 @@ module.exports = Controller;
 ```
 </p>
 </details>
+
+---
+
+# Log management
+
+## Timber. io
+
+Timber is a new kind of cloud-based logging system designed for applications and developers. Spend less time debugging and more time shipping.
+
+[Timber.io website](https://timber.io/).
+
+How to enable Timber. io inside PgFY to catch all logs automatically?
+In your ".env" file, set your environment variable for Timber Key:
+```terminal
+PGFY_LOGGER_TIMBER_KEY='YOUR_TIMBER_KEY'
+```
 
 ---
 
@@ -482,7 +535,7 @@ Here's a list of environment variables supported by PgFy:
 |                       `PGFY_TLS_KEY_PATH`     | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
 |                      `PGFY_TLS_CERT_PATH`     | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
 |                     `PGFY_APM_SENTRY_DSN`     | Your Sentry DSN.                                                                                                   |
-|                  `PGFY_LOGGER_TIMBER_KEY`     | Your Timer Key.                                                                                                    |
+|                  `PGFY_LOGGER_TIMBER_KEY`     | Your Timber Key.                                                                                                    |
 |     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`     | GerenciaNet Client ID.                                                                                             |
 | `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`     | GerenciaNet Client Secret.                                                                                         |
 |    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`     | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
@@ -723,7 +776,7 @@ function controller(service) {
   const controllers = {
     helloWorld: async (req, cb) => {
       try {
-        return cb(null, 'Hello-World !!!');
+        return cb(null, 'Hello World');
       } catch (e) {
         return cb(e.message, false);
       }
@@ -731,6 +784,7 @@ function controller(service) {
   };
   return controllers;
 }
+
 module.exports = controller;
 ```
 </p>
