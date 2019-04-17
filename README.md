@@ -359,7 +359,7 @@ const token = api.jwt.sign(request.body);
 reply.send({ token });
 ```
 
-The API will validate all requests for a **'v1'** endpoint, eg: **'/v1/user/:userId'**, and also that it's not a **'/login'**, eg: **'/v1/login'**. Looking to the **Authorization** header, eg: 'Bearer your_token_here'.
+The API will validate all requests for a **'v1'** endpoint, eg: **'/v1/user/:userId'**, and also that it's not a **'/login'** or **'/signup'**, looking to the **Authorization** header, eg: 'Bearer your_token_here'.
 
 ## Session Authentication with Redis
 
