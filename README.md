@@ -487,15 +487,15 @@ by default the Thumbnail will have the size 200x200, you can change it using the
 ```javascript
 // In your API controller
 ...
-const profileImage = await api.uploadToS3(
-  'YOUR_S3_BUCKET_DIRECTORY',
-  'FILENAME',
-  request.file.originalname,
-  request.file.buffer, // File Buffer
-  true, // Create a thumb file when is a image
-);
+const profileImage = await api.uploadToS3({
+  bucket: 'YOUR_BUCKET_PATH',
+  key: 'profileImage', // File name
+  fileName: request.file.originalname,
+  buffer: request.file.buffer, // File buffer
+  acl: 'public-read',
+  thumbnail: true, // Create a thumbnail. eg: profileImage-200x200.png
+});
 ```
-
 
 ---
 
@@ -607,7 +607,7 @@ Here's a list of environment variables supported by PgFy:
 |               `PGFY_AWS_ACCESS_KEY`               | Enable the Amazon S3 Bucket upload support setting your AWS Access Key.                                            |
 |               `PGFY_AWS_SECRET_ACCESS`            | Enable the Amazon S3 Bucket upload support setting your AWS Secre Key.                                             |
 |               `PGFY_AWS_S3_THUMB_WIDTH`           | Amazon S3 Bucket Thumb Width. Default 200                                                                          |
-|               `PGFY_AWS_S3_THUMB_HEIGHT`          | Amazon S3 Bucket Thumb Heigth. Default 200                                                                         |
+
 
 # CLI
 
