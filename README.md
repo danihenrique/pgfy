@@ -28,6 +28,7 @@
 - **Log management:** Easily access all your logs;
 - **BlackBox Testing support:** Adds your input and output specs for Runtime Testing;
 - **Postgres Migrations support:** Easily manage your migrations;
+- **Uploader support:** Easily upload files/images to the Cloud;
 - **APM support:** Catch Exceptions and be notified;
 - **Auto-Documentation:** Access all available API endpoints using Swagger UI.
 
@@ -50,6 +51,8 @@
 1. [Cache with built-in Redis client](#cache-with-built-in-redis-client)
 1. [Log management](#log-management)
    1. [Timber. io](#timber.-io)
+1. [Uploader Support](#uploader-support)
+   1. [Amazon S3 Bucket](#amazon-s3-bucket)
 1. [APM Support](#apm-support)
    1. [Sentry](#sentry)
 1. [Advanced Usage](#advanced-usage)
@@ -112,6 +115,7 @@ The Api option automatically generates CRUD (Create, Read, Update, Delete) endpo
 - [fastify-oauth2](https://github.com/fastify/fastify-oauth2)
 - [fastify-session-sets](https://github.com/mattiasewers/fastify-session-sets)
 - [fastify-metrics](https://gitlab.com/m03geek/fastify-metrics#http-routes-metrics)
+- [fastify-multer](https://github.com/fox1t/multer)
 
 ### NPM Modules pre-configured:
 
@@ -455,6 +459,46 @@ PGFY_LOGGER_TIMBER_KEY='YOUR_TIMBER_KEY'
 
 ---
 
+# Uploader Support
+
+To handle upload files in your controllers, set the environment variable **'PGFY_UPLOAD_MEMORY_STORAGE'** to true.
+
+```javascript
+// In your API Router
+...
+api.post(
+  `/v1/${componentName}/signup`,
+  {
+    preHandler: api.upload.toMemory.single('YOUR_FIELD_NAME'),
+    schema: swagger.signup.schema
+  },
+  controller.signup
+);
+
+```
+
+## Amazon S3 Bucket
+
+To Enable the Amazon S3 support, you need to set the environment variables **'PGFY_AWS_ACCESS_KEY'** and **'PGFY_AWS_SECRET_ACCESS'**. You **must** enable the Uploader support above, to handle the files in your controller.
+
+If you want to upload an image and at the same time create a thumbnail, pass the parameter true,
+by default the Thumbnail will have the size 200x200, you can change it using the environment variables **'PGFY_AWS_S3_THUMB_WIDTH'** and **'PGFY_AWS_S3_THUMB_HEIGHT'**.
+
+```javascript
+// In your API controller
+...
+const profileImage = await api.uploadToS3(
+  'YOUR_S3_BUCKET_DIRECTORY',
+  'FILENAME',
+  request.file.originalname,
+  request.file.buffer, // File Buffer
+  true, // Create a thumb file when is a image
+);
+```
+
+
+---
+
 # APM Support
 
 ## Sentry
@@ -515,48 +559,55 @@ PGFY_DATABASE_PG_DATABASE='your_database'
 ```
 Here's a list of environment variables supported by PgFy:
 
-|                             Variable name     | Description                                                                                                        |
-| ----------------------------------------:     | :----------------------------------------------------------------------------------------------------------------- |
-|                           `PGFY_API_NAME`     | API instance name. Default 'API'.                                                                                  |
-|                           `PGFY_API_HOST`     | API instance host. Default 127.0.0.1.                                                                              |
-|                           `PGFY_API_PORT`     | API instance port. Default 3000.                                                                                   |
-|                `PGFY_API_COMPONENTS_PATH`     | The path to extend the API with components. Default '/src/components'.                                             |
-|                       `PGFY_SERVICE_PATH`     | The path for your services. Default '/src/services'.                                                               |
-|                   `PGFY_DATABASE_PG_HOST`     | Postgres host. Default 127.0.0.1.                                                                                  |
-|                   `PGFY_DATABASE_PG_PORT`     | Postgres port. Default 5432.                                                                                       |
-|               `PGFY_DATABASE_PG_DATABASE`     | Postgres database name. Default 'postgres'.                                                                        |
-|                   `PGFY_DATABASE_PG_USER`     | Postgres username. Default 'postgres'.                                                                             |
-|                    `PGFY_DATABASE_PG_PWS`     | Postgres password. Default ''.                                                                                     |
-|               `PGFY_DATABASE_MONGODB_URL`     | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
-|                   `PGFY_CACHE_REDIS_HOST`     | Redis host.
-|                   `PGFY_CACHE_REDIS_PORT`     | Redis port.
-|               `PGFY_CACHE_REDIS_GEOREDIS`     | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
-|               `PGFY_CACHE_REDIS_EXPIRE_TIME`  | Redis Cache expiration time in minutes. Default 1 minute.                                                          |
-|                       `PGFY_TLS_KEY_PATH`     | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
-|                      `PGFY_TLS_CERT_PATH`     | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
-|                     `PGFY_APM_SENTRY_DSN`     | Your Sentry DSN.                                                                                                   |
-|                  `PGFY_LOGGER_TIMBER_KEY`     | Your Timber Key.                                                                                                    |
-|     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`     | GerenciaNet Client ID.                                                                                             |
-| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`     | GerenciaNet Client Secret.                                                                                         |
-|    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`     | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
-|   `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH`     | Apple APNS Cert path. Default your \$PROJECT_FOLDER/cert.pem                                                       |
-|     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`     | Google GCM API Key.                                                                                                |
-|         `PGFY_OAUTH2_FACEBOOK_START_PATH`     | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
-|       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`     | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
-|         `PGFY_FACEBOOK_CLIENT_ID`             | Facebook OAuth2.0 Client ID.                                                                                       |
-|         `PGFY_FACEBOOK_CLIENT_SECRET`         | Facebook OAuth2.0 Client Secret.                                                                                   |
-|         `PGFY_FACEBOOK_PERSIST_PROFILE`       | Facebook OAuth2.0 persist user profile into the user database. Default false                                       |
-|         `PGFY_AUTH_SESSION_SECRET`            | Authentication Session Secret. Example: 'a secret with minimum length of 32 characters'                            |
-|         `PGFY_AUTH_SESSION_LOGIN`             | Authentication Session login endpoint. Default is '/login'                                                         |
-|         `PGFY_AUTH_SESSION_MAX_AGE`           | Authentication Session max age. Default is '28 days'                                                               |
-|         `PGFY_AUTH_USER_TABLE`                | Authentication user database table. Default table is 'user'                                                        |
-|         `PGFY_AUTH_USER_TABLE_LOGIN_FIELD`    | Login field for User table authentication. Default field is 'email'                                                |
-|         `PGFY_AUTH_USER_TABLE_PASSWORD_FIELD` | Password field for User table authentication. Default field is 'password'                                          |
-|                  `PGFY_SWAGGER_HOST_PORT`     | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
-|               `PGFY_SWAGGER_ROUTE_PREFIX`     | Swagger route access. Default '/documentation'.                                                                    |
-|                 `PGFY_SWAGGER_INFO_TITLE`     | Swagger Title. Default 'Swagger UI'.                                                                               |
-|           `PGFY_SWAGGER_INFO_DESCRIPTION`     | Swagger Description. Default 'Swagger UI - API Documentation'.                                                     |
-|               `PGFY_SWAGGER_INFO_VERSION`     | Swagger Version. Default '1.0.0'.       
+|                             Variable name         | Description                                                                                                        |
+| ----------------------------------------:         | :----------------------------------------------------------------------------------------------------------------- |
+|                           `PGFY_API_NAME`         | API instance name. Default 'API'.                                                                                  |
+|                           `PGFY_API_HOST`         | API instance host. Default 127.0.0.1.                                                                              |
+|                           `PGFY_API_PORT`         | API instance port. Default 3000.                                                                                   |
+|                `PGFY_API_COMPONENTS_PATH`         | The path to extend the API with components. Default '/src/components'.                                             |
+|                       `PGFY_SERVICE_PATH`         | The path for your services. Default '/src/services'.                                                               |
+|                   `PGFY_DATABASE_PG_HOST`         | Postgres host. Default 127.0.0.1.                                                                                  |
+|                   `PGFY_DATABASE_PG_PORT`         | Postgres port. Default 5432.                                                                                       |
+|               `PGFY_DATABASE_PG_DATABASE`         | Postgres database name. Default 'postgres'.                                                                        |
+|                   `PGFY_DATABASE_PG_USER`         | Postgres username. Default 'postgres'.                                                                             |
+|                    `PGFY_DATABASE_PG_PWS`         | Postgres password. Default ''.                                                                                     |
+|                    `PGFY_DATABASE_PG_SOFTDELETE`  | Postgres enable soft delete support using **deleted** table field. Default false                                   |
+|               `PGFY_DATABASE_MONGODB_URL`         | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
+|                   `PGFY_CACHE_REDIS_HOST`         | Redis host.                                                                                                        | 
+|                   `PGFY_CACHE_REDIS_PORT`         | Redis port.                                                                                                        |
+|               `PGFY_CACHE_REDIS_GEOREDIS`         | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
+|               `PGFY_CACHE_REDIS_EXPIRE_TIME`      | Redis Cache expiration time in minutes. Default 1 minute.                                                          |
+|                       `PGFY_TLS_KEY_PATH`         | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
+|                      `PGFY_TLS_CERT_PATH`         | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
+|                     `PGFY_APM_SENTRY_DSN`         | Your Sentry DSN.                                                                                                   |
+|                  `PGFY_LOGGER_TIMBER_KEY`         | Your Timber Key.                                                                                                   |
+|     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`         | GerenciaNet Client ID.                                                                                             |
+| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`         | GerenciaNet Client Secret.                                                                                         |
+|    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`         | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
+|   `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH`         | Apple APNS Cert path. Default your \$PROJECT_FOLDER/cert.pem                                                       |
+|     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`         | Google GCM API Key.                                                                                                |
+|         `PGFY_OAUTH2_FACEBOOK_START_PATH`         | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
+|       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`         | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
+|         `PGFY_FACEBOOK_CLIENT_ID`                 | Facebook OAuth2.0 Client ID.                                                                                       |
+|         `PGFY_FACEBOOK_CLIENT_SECRET`             | Facebook OAuth2.0 Client Secret.                                                                                   |
+|         `PGFY_FACEBOOK_PERSIST_PROFILE`           | Facebook OAuth2.0 persist user profile into the user database. Default false                                       |
+|         `PGFY_AUTH_JWT_SECRET`                    | Enable the JSON WebToken support setting your JWT secret.                                                          |
+|         `PGFY_AUTH_JWT_EXPIRES_IN`                | JSON WebToken expires in '10h' by Default                                                                          |
+|         `PGFY_AUTH_SESSION_SECRET`                | Authentication Session Secret. Example: 'a secret with minimum length of 32 characters'                            |
+|         `PGFY_AUTH_SESSION_LOGIN`                 | Authentication Session login endpoint. Default is '/login'                                                         |
+|         `PGFY_AUTH_SESSION_MAX_AGE`               | Authentication Session max age. Default is '28 days'                                                               |
+|         `PGFY_AUTH_USER_TABLE`                    | Authentication user database table. Default table is 'user'                                                        |
+|         `PGFY_AUTH_USER_TABLE_LOGIN_FIELD`        | Login field for User table authentication. Default field is 'email'                                                |
+|         `PGFY_AUTH_USER_TABLE_PASSWORD_FIELD`     | Password field for User table authentication. Default field is 'password'                                          |
+|                  `PGFY_SWAGGER_HOST_PORT`         | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
+|               `PGFY_SWAGGER_ROUTE_PREFIX`         | Swagger route access. Default '/documentation'.                                                                    |
+|                 `PGFY_SWAGGER_INFO_TITLE`         | Swagger Title. Default 'Swagger UI'.                                                                               |
+|           `PGFY_SWAGGER_INFO_DESCRIPTION`         | Swagger Description. Default 'Swagger UI - API Documentation'.                                                     |
+|               `PGFY_UPLOAD_MEMORY_STORAGE`        | Enable the Upload support using the Fastify-multer plugin. Default false.                                          |
+|               `PGFY_AWS_ACCESS_KEY`               | Enable the Amazon S3 Bucket upload support setting your AWS Access Key.                                            |
+|               `PGFY_AWS_SECRET_ACCESS`            | Enable the Amazon S3 Bucket upload support setting your AWS Secre Key.                                             |
+|               `PGFY_AWS_S3_THUMB_WIDTH`           | Amazon S3 Bucket Thumb Width. Default 200                                                                          |
+|               `PGFY_AWS_S3_THUMB_HEIGHT`          | Amazon S3 Bucket Thumb Heigth. Default 200                                                                         |
 
 # CLI
 
