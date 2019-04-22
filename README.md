@@ -487,10 +487,13 @@ by default the Thumbnail will have the size 200x200, you can change it using the
 ```javascript
 // In your API controller
 ...
+// Get image extension
+const imageExtension = fileExtension(request.file.originalname);
+// Create the image file name
+const keyImage = `fileName.${imageExtension}`;
 const profileImage = await api.uploadToS3({
   bucket: 'YOUR_BUCKET_PATH',
-  key: 'profileImage', // File name
-  fileName: request.file.originalname,
+  key: keyImage,
   buffer: request.file.buffer, // File buffer
   acl: 'public-read',
   thumbnail: true, // Create a thumbnail. eg: profileImage-200x200.png
@@ -564,6 +567,7 @@ Here's a list of environment variables supported by PgFy:
 |                           `PGFY_API_NAME`         | API instance name. Default 'API'.                                                                                  |
 |                           `PGFY_API_HOST`         | API instance host. Default 127.0.0.1.                                                                              |
 |                           `PGFY_API_PORT`         | API instance port. Default 3000.                                                                                   |
+|                           `PGFY_LOGGER_FILE`      | Enable API instance logger. Default false.                                                                                  |
 |                `PGFY_API_COMPONENTS_PATH`         | The path to extend the API with components. Default '/src/components'.                                             |
 |                       `PGFY_SERVICE_PATH`         | The path for your services. Default '/src/services'.                                                               |
 |                   `PGFY_DATABASE_PG_HOST`         | Postgres host. Default 127.0.0.1.                                                                                  |
