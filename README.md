@@ -482,18 +482,17 @@ api.post(
 To Enable the Amazon S3 support, you need to set the environment variables **'PGFY_AWS_ACCESS_KEY'** and **'PGFY_AWS_SECRET_ACCESS'**. You **must** enable the Uploader support above, to handle the files in your controller.
 
 If you want to upload an image and at the same time create a thumbnail, pass the parameter true,
-by default the Thumbnail will have the size 200x200, you can change it using the environment variables **'PGFY_AWS_S3_THUMB_WIDTH'** and **'PGFY_AWS_S3_THUMB_HEIGHT'**.
+by default the Thumbnail will have the size 200x200, you can change it using the environment variables **'PGFY_AWS_S3_THUMB_WIDTH'**.
 
 ```javascript
 // In your API controller
 ...
-// Get image extension
-const imageExtension = fileExtension(request.file.originalname);
 // Create the image file name
-const keyImage = `fileName.${imageExtension}`;
-const profileImage = await api.uploadToS3({
+const keyName = `fileName.${imageExtension}`;
+const images = await api.uploadToS3({
   bucket: 'YOUR_BUCKET_PATH',
-  key: keyImage,
+  key: keyName,
+  fileName: request.file.originalname,
   buffer: request.file.buffer, // File buffer
   acl: 'public-read',
   thumbnail: true, // Create a thumbnail. eg: profileImage-200x200.png
