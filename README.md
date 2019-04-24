@@ -461,7 +461,8 @@ PGFY_LOGGER_TIMBER_KEY='YOUR_TIMBER_KEY'
 
 # Uploader Support
 
-To handle upload files in your controllers, set the environment variable **'PGFY_UPLOAD_MEMORY_STORAGE'** to true.
+## Multipart/Form-data
+To handle upload files in your controllers using Multipart/Form-dataset, the environment variable **'PGFY_UPLOAD_MEMORY_STORAGE'** to true.
 
 ```javascript
 // In your API Router
@@ -489,11 +490,21 @@ by default the Thumbnail will have the size 200x200, you can change it using the
 ...
 // Create the image file name
 const keyName = `fileName.${imageExtension}`;
-const images = await api.uploadToS3({
+// Upload using Multipart/form-data
+const imagesByMultiPart = await api.uploadToS3({
   bucket: 'YOUR_BUCKET_PATH',
   key: keyName,
   fileName: request.file.originalname,
   buffer: request.file.buffer, // File buffer
+  acl: 'public-read',
+  thumbnail: true, // Create a thumbnail. eg: profileImage-200x200.png
+});
+// Upload using Base64 data
+const imagesByMultiPart = await api.uploadToS3({
+  bucket: 'YOUR_BUCKET_PATH',
+  key: keyName,
+  buffer: request.body['YOUR_JSON_BASE64_FILED-HERE'],
+  ContentEncoding: 'base64',
   acl: 'public-read',
   thumbnail: true, // Create a thumbnail. eg: profileImage-200x200.png
 });

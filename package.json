@@ -1,6 +1,6 @@
 {
   "name": "pgfy",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A Node.js Toolbox for API and Microservices development.",
   "main": "index.js",
   "bin": {
