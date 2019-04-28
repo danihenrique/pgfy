@@ -1,6 +1,6 @@
 {
   "name": "pgfy",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "A Node.js Toolbox for API and Microservices development.",
   "main": "index.js",
   "bin": {
@@ -35,6 +35,7 @@
     "chalk-pipe": "^2.0.0",
     "cote": "^0.19.1",
     "dotenv": "^7.0.0",
+    "email-templates": "^5.0.5",
     "fastify": "^2.1.0",
     "fastify-cookie": "^3.0.2",
     "fastify-cors": "^2.1.2",
@@ -62,6 +63,7 @@
     "nanoid": "^2.0.1",
     "node-cron": "^2.0.3",
     "node-gcm": "^1.0.2",
+    "nodemailer": "^6.1.1",
     "ora": "^3.2.0",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
