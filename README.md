@@ -29,6 +29,7 @@
 - **BlackBox Testing support:** Adds your input and output specs for Runtime Testing;
 - **Postgres Migrations support:** Easily manage your migrations;
 - **Uploader support:** Easily upload files/images to the Cloud;
+- **Email support:** Easily send emails;
 - **APM support:** Catch Exceptions and be notified;
 - **Auto-Documentation:** Access all available API endpoints using Swagger UI.
 
@@ -53,6 +54,9 @@
    1. [Timber. io](#timber.-io)
 1. [Uploader Support](#uploader-support)
    1. [Amazon S3 Bucket](#amazon-s3-bucket)
+1. [Email Support](#email-support)
+   1. [Nodemailer](#nodemailer)
+   1. [SendGrid](#sendgrid)
 1. [APM Support](#apm-support)
    1. [Sentry](#sentry)
 1. [Advanced Usage](#advanced-usage)
@@ -107,15 +111,108 @@ The Api option automatically generates CRUD (Create, Read, Update, Delete) endpo
 
 ### Plugins pre-configured:
 
-- [fastify-cors](https://github.com/fastify/fastify-cors)
-- [fastify-helmet](https://github.com/fastify/fastify-helmet)
-- [fastify-rate-limit](https://github.com/fastify/fastify-rate-limit)
-- [fastify-oas](https://gitlab.com/m03geek/fastify-oas)
-- [fastify-tls-keygen](https://gitlab.com/sebdeckers/fastify-tls-keygen)
-- [fastify-oauth2](https://github.com/fastify/fastify-oauth2)
-- [fastify-session-sets](https://github.com/mattiasewers/fastify-session-sets)
-- [fastify-metrics](https://gitlab.com/m03geek/fastify-metrics#http-routes-metrics)
-- [fastify-multer](https://github.com/fox1t/multer)
+<details>
+<summary>
+  fastify-cors
+</summary>
+  [fastify-cors](https://github.com/fastify/fastify-cors)
+<p>
+<code>
+// Default options:
+{
+  origin: '*',
+}
+</code>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-helmet
+</summary>
+  [fastify-helmet](https://github.com/fastify/fastify-helmet)
+<p>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-rate-limit
+</summary>
+  [fastify-rate-limit](https://github.com/fastify/fastify-rate-limit)
+<p>
+<code>
+// Default options:
+{
+  max: 100,
+  timeWindow: '1 minute',
+}
+</code>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-oas
+</summary>
+  [fastify-oas](https://gitlab.com/m03geek/fastify-oas)
+<p>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-tls-keygen
+</summary>
+  [fastify-tls-keygen](https://gitlab.com/sebdeckers/fastify-tls-keygen)
+<p>
+<code>
+<p>ROOT_PROJECT</p>
+<p>├── api_key.pem</p>
+<p>└── api_cert.pem</p>
+</code>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-oauth2
+</summary>
+  [fastify-oauth2](https://github.com/fastify/fastify-oauth2)
+<p>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-session-sets
+</summary>
+  [fastify-session-sets](https://github.com/mattiasewers/fastify-session-sets)
+<p>
+<code>
+// Default options:
+{ secret: process.env.PGFY_AUTH_SESSION_SECRET }
+</code>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-metrics
+</summary>
+  [fastify-metrics](https://gitlab.com/m03geek/fastify-metrics#http-routes-metrics)
+<p>
+</p>
+</details>
+
+<details>
+<summary>
+  fastify-multer
+</summary>
+  [fastify-multer](https://github.com/fox1t/multer)
+<p>
+</p>
+</details>
 
 ### NPM Modules pre-configured:
 
@@ -512,6 +609,63 @@ const imagesByMultiPart = await api.uploadToS3({
 
 ---
 
+# Email Support
+
+## Nodemailer
+
+Nodemailer it's the most famous Email library.
+To enable it, you need to set the environment variables.
+
+### How to create your Nodemailer templates
+
+```terminal
+.
+└── emails
+    └── YOUR_TEMPLATE_NAME
+        ├── html.pug
+        └── subject.pug
+```
+
+html.pug
+```javascript
+p Hi #{name}
+```
+
+subject.pug
+```javascript
+= `Hi ${name}, welcome!!!`
+```
+
+### How to use Nodemailer inside your controller
+
+```javascript
+// Inside your API controller
+...
+const { nodemailer } = api.email;
+nodemailer.sendTemplate(
+  'USER_EMAIL_HERE',
+  { name: 'Demo' },
+  'YOUR_TEMPLATE_NAME',
+);
+```
+
+## SendGrid
+
+SendGrid it's a really easy and cheap email service. It allows you to create a powerful template using your website.
+To enable it, you need to set the environment variables.
+
+```javascript
+...
+const { sendgrid } = api.email;
+const data = {
+  name: 'Test'
+}
+sendgrid.sendTemplate = ('EMAIL_TO', data, 'YOUR_TEMPLATE_ID');
+
+```
+
+---
+
 # APM Support
 
 ## Sentry
@@ -572,55 +726,61 @@ PGFY_DATABASE_PG_DATABASE='your_database'
 ```
 Here's a list of environment variables supported by PgFy:
 
-|                             Variable name         | Description                                                                                                        |
-| ----------------------------------------:         | :----------------------------------------------------------------------------------------------------------------- |
-|                           `PGFY_API_NAME`         | API instance name. Default 'API'.                                                                                  |
-|                           `PGFY_API_HOST`         | API instance host. Default 127.0.0.1.                                                                              |
-|                           `PGFY_API_PORT`         | API instance port. Default 3000.                                                                                   |
-|                           `PGFY_LOGGER_FILE`      | Enable API instance logger. Default false.                                                                                  |
-|                `PGFY_API_COMPONENTS_PATH`         | The path to extend the API with components. Default '/src/components'.                                             |
-|                       `PGFY_SERVICE_PATH`         | The path for your services. Default '/src/services'.                                                               |
-|                   `PGFY_DATABASE_PG_HOST`         | Postgres host. Default 127.0.0.1.                                                                                  |
-|                   `PGFY_DATABASE_PG_PORT`         | Postgres port. Default 5432.                                                                                       |
-|               `PGFY_DATABASE_PG_DATABASE`         | Postgres database name. Default 'postgres'.                                                                        |
-|                   `PGFY_DATABASE_PG_USER`         | Postgres username. Default 'postgres'.                                                                             |
-|                    `PGFY_DATABASE_PG_PWS`         | Postgres password. Default ''.                                                                                     |
-|                    `PGFY_DATABASE_PG_SOFTDELETE`  | Postgres enable soft delete support using **deleted** table field. Default false                                   |
-|               `PGFY_DATABASE_MONGODB_URL`         | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
-|                   `PGFY_CACHE_REDIS_HOST`         | Redis host.                                                                                                        | 
-|                   `PGFY_CACHE_REDIS_PORT`         | Redis port.                                                                                                        |
-|               `PGFY_CACHE_REDIS_GEOREDIS`         | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
-|               `PGFY_CACHE_REDIS_EXPIRE_TIME`      | Redis Cache expiration time in minutes. Default 1 minute.                                                          |
-|                       `PGFY_TLS_KEY_PATH`         | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
-|                      `PGFY_TLS_CERT_PATH`         | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
-|                     `PGFY_APM_SENTRY_DSN`         | Your Sentry DSN.                                                                                                   |
-|                  `PGFY_LOGGER_TIMBER_KEY`         | Your Timber Key.                                                                                                   |
-|     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`         | GerenciaNet Client ID.                                                                                             |
-| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`         | GerenciaNet Client Secret.                                                                                         |
-|    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`         | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
-|   `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH`         | Apple APNS Cert path. Default your \$PROJECT_FOLDER/cert.pem                                                       |
-|     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`         | Google GCM API Key.                                                                                                |
-|         `PGFY_OAUTH2_FACEBOOK_START_PATH`         | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
-|       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`         | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
-|         `PGFY_FACEBOOK_CLIENT_ID`                 | Facebook OAuth2.0 Client ID.                                                                                       |
-|         `PGFY_FACEBOOK_CLIENT_SECRET`             | Facebook OAuth2.0 Client Secret.                                                                                   |
-|         `PGFY_FACEBOOK_PERSIST_PROFILE`           | Facebook OAuth2.0 persist user profile into the user database. Default false                                       |
-|         `PGFY_AUTH_JWT_SECRET`                    | Enable the JSON WebToken support setting your JWT secret.                                                          |
-|         `PGFY_AUTH_JWT_EXPIRES_IN`                | JSON WebToken expires in '10h' by Default                                                                          |
-|         `PGFY_AUTH_SESSION_SECRET`                | Authentication Session Secret. Example: 'a secret with minimum length of 32 characters'                            |
-|         `PGFY_AUTH_SESSION_LOGIN`                 | Authentication Session login endpoint. Default is '/login'                                                         |
-|         `PGFY_AUTH_SESSION_MAX_AGE`               | Authentication Session max age. Default is '28 days'                                                               |
-|         `PGFY_AUTH_USER_TABLE`                    | Authentication user database table. Default table is 'user'                                                        |
-|         `PGFY_AUTH_USER_TABLE_LOGIN_FIELD`        | Login field for User table authentication. Default field is 'email'                                                |
-|         `PGFY_AUTH_USER_TABLE_PASSWORD_FIELD`     | Password field for User table authentication. Default field is 'password'                                          |
-|                  `PGFY_SWAGGER_HOST_PORT`         | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
-|               `PGFY_SWAGGER_ROUTE_PREFIX`         | Swagger route access. Default '/documentation'.                                                                    |
-|                 `PGFY_SWAGGER_INFO_TITLE`         | Swagger Title. Default 'Swagger UI'.                                                                               |
-|           `PGFY_SWAGGER_INFO_DESCRIPTION`         | Swagger Description. Default 'Swagger UI - API Documentation'.                                                     |
-|               `PGFY_UPLOAD_MEMORY_STORAGE`        | Enable the Upload support using the Fastify-multer plugin. Default false.                                          |
-|               `PGFY_AWS_ACCESS_KEY`               | Enable the Amazon S3 Bucket upload support setting your AWS Access Key.                                            |
-|               `PGFY_AWS_SECRET_ACCESS`            | Enable the Amazon S3 Bucket upload support setting your AWS Secre Key.                                             |
-|               `PGFY_AWS_S3_THUMB_WIDTH`           | Amazon S3 Bucket Thumb Width. Default 200                                                                          |
+|                             Variable name           | Description                                                                                                        |
+| ----------------------------------------:           | :----------------------------------------------------------------------------------------------------------------- |
+|                           `PGFY_API_NAME`           | API instance name. Default 'API'.                                                                                  |
+|                           `PGFY_API_HOST`           | API instance host. Default 127.0.0.1.                                                                              |
+|                           `PGFY_API_PORT`           | API instance port. Default 3000.                                                                                   |
+|                           `PGFY_LOGGER_FILE`        | Enable API instance logger. Default false.                                                                         |
+|                `PGFY_API_COMPONENTS_PATH`           | The path to extend the API with components. Default '/src/components'.                                             |
+|                       `PGFY_SERVICE_PATH`           | The path for your services. Default '/src/services'.                                                               |
+|                   `PGFY_DATABASE_PG_HOST`           | Postgres host. Default 127.0.0.1.                                                                                  |
+|                   `PGFY_DATABASE_PG_PORT`           | Postgres port. Default 5432.                                                                                       |
+|               `PGFY_DATABASE_PG_DATABASE`           | Postgres database name. Default 'postgres'.                                                                        |
+|                   `PGFY_DATABASE_PG_USER`           | Postgres username. Default 'postgres'.                                                                             |
+|                    `PGFY_DATABASE_PG_PWS`           | Postgres password. Default ''.                                                                                     |
+|                    `PGFY_DATABASE_PG_SOFTDELETE`    | Postgres enable soft delete support using **deleted** table field. Default false                                   |
+|               `PGFY_DATABASE_MONGODB_URL`           | MongoDB Uri. Default 'mongodb://localhost:27017'.                                                                  |
+|                   `PGFY_CACHE_REDIS_HOST`           | Redis host.                                                                                                        | 
+|                   `PGFY_CACHE_REDIS_PORT`           | Redis port.                                                                                                        |
+|               `PGFY_CACHE_REDIS_GEOREDIS`           | Redis Geolocation addon. Default true. See [Using Redis Geolocation Addon](https://www.npmjs.com/package/georedis) |
+|               `PGFY_CACHE_REDIS_EXPIRE_TIME`        | Redis Cache expiration time in minutes. Default 1 minute.                                                          |
+|                     `PGFY_EMAIL_SENDGRID_API_KEY`   | Your SendGrid Api key.                                                                                             |
+|                     `PGFY_EMAIL_SENDGRID_FROM`      | Your SendGrid From email contact, to be used when you send the messages.                                           |
+|                     `PGFY_EMAIL_NODEMAILER_SERVICE` | Set your Nodemailer Service. E.g: 'gmail'                                                                          |
+|                     `PGFY_EMAIL_NODEMAILER_FROM`    | Your Nodemailer From email contact, to be used when you send the messages.                                         |
+|                     `PGFY_EMAIL_NODEMAILER_USER`    | Your Nodemailer Authentication user.                                                                               |
+|                     `PGFY_EMAIL_NODEMAILER_PASS`    | Your Nodemailer Authentication password.                                                                           |
+|                       `PGFY_TLS_KEY_PATH`           | TLS Key Path. Default your \$PROJECT_FOLDER/server.key.                                                            |
+|                      `PGFY_TLS_CERT_PATH`           | TLS Cert Path. Default your \$PROJECT_FOLDER/server.cert.                                                          |
+|                     `PGFY_APM_SENTRY_DSN`           | Your Sentry DSN.                                                                                                   |
+|                  `PGFY_LOGGER_TIMBER_KEY`           | Your Timber Key.                                                                                                   |
+|     `PGFY_PAYMENTS_GERENCIANET_CLIENT_ID`           | GerenciaNet Client ID.                                                                                             |
+| `PGFY_PAYMENTS_GERENCIANET_CLIENT_SECRET`           | GerenciaNet Client Secret.                                                                                         |
+|    `PGFY_PUSH_NOTIFICATION_APNS_KEY_PATH`           | Apple APNS key path. Default your \$PROJECT_FOLDER/key.pem                                                         |
+|   `PGFY_PUSH_NOTIFICATION_APNS_CERT_PATH`           | Apple APNS Cert path. Default your \$PROJECT_FOLDER/cert.pem                                                       |
+|     `PGFY_PPUSH_NOTIFICATION_GCM_API_KEY`           | Google GCM API Key.                                                                                                |
+|         `PGFY_OAUTH2_FACEBOOK_START_PATH`           | Facebook OAuth2.0 login endpoint. Default '/login/facebook'.                                                       |
+|       `PGFY_OAUTH2_FACEBOOK_CALLBACK_URI`           | Facebook OAuth2.0 callback URI. Default 'https://localhost:3000/login/facebook/callback'.                          |
+|         `PGFY_FACEBOOK_CLIENT_ID`                   | Facebook OAuth2.0 Client ID.                                                                                       |
+|         `PGFY_FACEBOOK_CLIENT_SECRET`               | Facebook OAuth2.0 Client Secret.                                                                                   |
+|         `PGFY_FACEBOOK_PERSIST_PROFILE`             | Facebook OAuth2.0 persist user profile into the user database. Default false                                       |
+|         `PGFY_AUTH_JWT_SECRET`                      | Enable the JSON WebToken support setting your JWT secret.                                                          |
+|         `PGFY_AUTH_JWT_EXPIRES_IN`                  | JSON WebToken expires in '10h' by Default                                                                          |
+|         `PGFY_AUTH_SESSION_SECRET`                  | Authentication Session Secret. Example: 'a secret with minimum length of 32 characters'                            |
+|         `PGFY_AUTH_SESSION_LOGIN`                   | Authentication Session login endpoint. Default is '/login'                                                         |
+|         `PGFY_AUTH_SESSION_MAX_AGE`                 | Authentication Session max age. Default is '28 days'                                                               |
+|         `PGFY_AUTH_USER_TABLE`                      | Authentication user database table. Default table is 'user'                                                        |
+|         `PGFY_AUTH_USER_TABLE_LOGIN_FIELD`          | Login field for User table authentication. Default field is 'email'                                                |
+|         `PGFY_AUTH_USER_TABLE_PASSWORD_FIELD`       | Password field for User table authentication. Default field is 'password'                                          |
+|                  `PGFY_SWAGGER_HOST_PORT`           | Swagger URI. Default '127.0.0.1:3000'.                                                                             |
+|               `PGFY_SWAGGER_ROUTE_PREFIX`           | Swagger route access. Default '/documentation'.                                                                    |
+|                 `PGFY_SWAGGER_INFO_TITLE`           | Swagger Title. Default 'Swagger UI'.                                                                               |
+|           `PGFY_SWAGGER_INFO_DESCRIPTION`           | Swagger Description. Default 'Swagger UI - API Documentation'.                                                     |
+|               `PGFY_UPLOAD_MEMORY_STORAGE`          | Enable the Upload support using the Fastify-multer plugin. Default false.                                          |
+|               `PGFY_AWS_ACCESS_KEY`                 | Enable the Amazon S3 Bucket upload support setting your AWS Access Key.                                            |
+|               `PGFY_AWS_SECRET_ACCESS`              | Enable the Amazon S3 Bucket upload support setting your AWS Secre Key.                                             |
+|               `PGFY_AWS_S3_THUMB_WIDTH`             | Amazon S3 Bucket Thumb Width. Default 200                                                                          |
 
 
 # CLI
