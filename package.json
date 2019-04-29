@@ -67,7 +67,7 @@
     "ora": "^3.2.0",
     "passport": "^0.4.0",
     "passport-facebook-token": "^3.3.0",
-    "pg-json-schema-export": "^0.13.7",
+    "pg-json-schema-export": "git+https://github.com/danihenrique/pg-json-schema-export.git",
     "postgres-migrations": "^3.0.2",
     "redis": "^2.8.0",
     "sharp": "^0.22.0",
