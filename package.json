@@ -69,7 +69,7 @@
     "passport-facebook-token": "^3.3.0",
     "pg-json-schema-export": "git+https://github.com/danihenrique/pg-json-schema-export.git",
     "postgres-migrations": "^3.0.2",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "sharp": "^0.22.0",
     "timber": "^3.1.3"
   },
