@@ -70,7 +70,7 @@
     "pg-json-schema-export": "git+https://github.com/danihenrique/pg-json-schema-export.git",
     "postgres-migrations": "^3.0.2",
     "redis": "^2.8.0",
-    "sharp": "^0.22.0",
+    "sharp": "^0.30.5",
     "timber": "^3.1.3"
   },
   "devDependencies": {
