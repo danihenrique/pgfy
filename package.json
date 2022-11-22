@@ -33,7 +33,7 @@
     "bluebird": "^3.5.4",
     "bunyan": "^1.8.12",
     "chalk-pipe": "^2.0.0",
-    "cote": "^0.19.1",
+    "cote": "^1.0.3",
     "dotenv": "^7.0.0",
     "email-templates": "^5.0.5",
     "fastify": "^2.1.0",
